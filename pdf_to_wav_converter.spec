@@ -34,10 +34,11 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['app_icon.ico'],
 )
 app = BUNDLE(
     exe,
     name='pdf_to_wav_converter.app',
-    icon=None,
+    icon='app_icon.ico',
     bundle_identifier=None,
 )

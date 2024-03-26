@@ -1,0 +1,3 @@
+([('Converter',
+   '/Users/simonekman/Documents/projects/pdfToWav/Converter/dist/Converter',
+   'EXECUTABLE')],)

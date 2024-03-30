@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['pdf_to_wav_converter.py'],
+    ['pdf_to_audio_converter.py'],
     pathex=[],
     binaries=[],
     datas=[],

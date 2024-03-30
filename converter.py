@@ -1,8 +1,7 @@
 import pyttsx3
 import PyPDF2
-import os
-import time
-import translator
+import os, time
+import translator, gtts
 
 class Converter:
     def __init__(self):
@@ -10,27 +9,13 @@ class Converter:
         self.save_folder = ""
         self.page_start = 0
         self.page_end = 0
-        self.wav_name = f"my_wav{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.wav"
+        self.audio_name = f"my_audio{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}.mp3"
         self.speaker = pyttsx3.init()
         self.my_translator = translator.MyTranslator()
-        self.src = ""
+        self.src = "en"
         self.dest = ""
 
-        # get voices, set def act, 
-        self.voices = self.get_voices()
-        self.active_voice = self.voices[0]
-        self.set_active_voice(self.voices[14].name)
         
-        # print available voices
-        #print(len(self.voices))
-        #for voice in self.voices:
-        #    print(voice.name)
-
-        # set def speech rate
-        self.speech_rate = self.get_speech_rate()
-        #print(f"speech rate: {self.speech_rate}")
-
-
     def get_src(self):
         return self.src
     
@@ -67,30 +52,11 @@ class Converter:
     def get_page_end(self):
         return self.page_end
 
-    def set_wav_name(self, wav_name):
-        self.wav_name = wav_name
+    def set_audio_name(self, audio_name):
+        self.audio_name = audio_name
 
-    def get_wav_name(self):
-        return self.wav_name
-
-    def get_voices(self):
-        return self.speaker.getProperty('voices')
-    
-    def set_active_voice(self, name):
-        for voice in self.voices:
-            if voice.name == name:
-                self.active_voice = voice
-                self.speaker.setProperty('voice', voice.id)
-
-    def get_active_voice(self):
-        return self.active_voice
-
-    def set_speech_rate(self, speech_rate):
-        self.speech_rate = speech_rate
-        self.speaker.setProperty('rate', speech_rate)
-
-    def get_speech_rate(self):
-        return self.speaker.getProperty('rate')
+    def get_audio_name(self):
+        return self.audio_name
 
     def read_pdf(self, use_translate):
         pdf_reader = PyPDF2.PdfReader(open(self.pdf_path, 'rb'))
@@ -116,29 +82,16 @@ class Converter:
         return full_text
 
     
-    def convert(self, text):
-        # setup
-        # get voice
-        voice_model = self.active_voice
-        self.speaker.setProperty('voice', voice_model)
-
+    def convert(self, text, filename, use_translate):
         # get save path
-        save_path = self.save_folder
+        save_path = self.get_save_folder()
         #print(save_path)
+        if not filename.endswith(".mp3"):
+            filename += ".mp3"
+        file_path = os.path.join(save_path, filename)
         
-        # save file
-        self.speaker.save_to_file(text, os.path.join(save_path, self.get_wav_name()))
-        self.speaker.runAndWait()
-        self.speaker.stop()
-        #print(f"saved as {self.wav_name}\nat\n{self.get_save_folder}")
-
-    def voice_speak(self, name):
-        self.set_active_voice(name)
-        #print(f"name sent: {name}")
-        #print(f"active voice: {self.active_voice.name}")
-        phrase = f"Hi, my name is {self.active_voice.name}"
-        self.speaker.say(phrase)
-        self.speaker.runAndWait()
+        tts = gtts.gTTS(text=text, lang=self.get_dest() if use_translate else self.get_src())
+        tts.save(file_path)
 
 
     @staticmethod

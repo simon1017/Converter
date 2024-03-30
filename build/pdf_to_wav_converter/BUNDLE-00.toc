@@ -1,3 +1,0 @@
-([('pdf_to_wav_converter',
-   '/Users/simonekman/Documents/projects/pdfToWav/Converter/dist/pdf_to_wav_converter',
-   'EXECUTABLE')],)

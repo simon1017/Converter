@@ -1,1 +1,1 @@
-Converts pdf to wav
+Converts pdf to audio

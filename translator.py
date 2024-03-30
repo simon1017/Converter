@@ -23,7 +23,7 @@ class MyTranslator:
         #print(type(src))
         #print(type(dest))
         translation = self.gtranslator.translate(str(text), src=str(src), dest=str(dest))
-        print(translation.text)
+        #print(translation.text)
         return translation.text
 
 if __name__ == "__main__":
